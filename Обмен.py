@@ -1,11 +1,12 @@
 import  requests
 import json
 from tkinter import *
+from tkinter import ttk
 from tkinter import messagebox as mb
 
 
 def exchenge():
-    code = entry.get()
+    code = combobox.get()
 
     if code:
         try:
@@ -28,10 +29,15 @@ window.title("Курсы обмена валют")
 window.geometry("360x180")
 
 
-Label(text="Введите код валюты").pack(padx=10, pady=10)
+Label(text="Выберите код валюты").pack(padx=10, pady=10)
+cur = ['RUB', 'EUR', 'GBP', 'JPY', 'CNY', "KZT", "UZS", "CHF", "AED", "CAD"]
 
-entry = Entry()
-entry.pack(padx=10, pady=10)
+
+combobox = ttk.Combobox(values=cur)
+combobox.pack(padx=10, pady=10)
+
+# entry = Entry()
+# entry.pack(padx=10, pady=10)
 
 Button(text="Получить курс обмена к доллару", command=exchenge).pack(padx=10, pady=10)
 
