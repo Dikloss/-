@@ -6,7 +6,7 @@ from tkinter import messagebox as mb
 
 
 def update_b_label(event):
-    code = t_combobox.get()
+    code = b_combobox.get()
     name = cur[code]
     b_label.config(text=name)
 
@@ -44,7 +44,7 @@ cur = {
         'EUR': 'Евро',
         'GBP': 'Британский фунт стерлингов',
         'JPY': 'Японская иена',
-        'CNY': 'Китфйский юань',
+        'CNY': 'Китайский юань',
         "KZT": 'Казахский тенге',
         "UZS": 'Узбекский сум',
         "CHF": 'Швейцарский франк',
@@ -60,19 +60,20 @@ window.geometry("300x300")
 Label(text="Базовая валюта").pack(padx=10, pady=10)
 b_combobox = ttk.Combobox(values=list(cur.keys()))
 b_combobox.pack(padx=10, pady=10)
+b_combobox.bind("<<ComboboxSelected>>", update_b_label)
+b_label = ttk.Label()
+b_label.pack(padx=10, pady=10)
 
 
 Label(text="Целевая валюта").pack(padx=10, pady=10)
+
 t_combobox = ttk.Combobox(values=list(cur.keys()))
 t_combobox.pack(padx=10, pady=10)
 t_combobox.bind("<<ComboboxSelected>>", update_t_label)
-
-b_label = ttk.Label()
-b_label.pack(padx=10, pady=10)
-b_combobox.bind("<<ComboboxSelected>>", update_b_label)
-
 t_label = ttk.Label()
 t_label.pack(padx=10, pady=10)
+
+
 
 # entry = Entry()
 # entry.pack(padx=10, pady=10)
