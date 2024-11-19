@@ -10,10 +10,11 @@ def update_b_label(event):
     name = cur[code]
     b_label.config(text=name)
 
+
 def update_sb_label(event):
     code = sb_combobox.get()
     name = cur[code]
-    b_label.config(text=name)
+    sb_label.config(text=name)
 
 
 def update_t_label(event):
@@ -27,7 +28,7 @@ def exchenge():
     b_code = b_combobox.get()
     sb_code = sb_combobox.get()
 
-    if t_code and b_code and sb_code:
+    if t_code and b_code:
         try:
             response = requests.get(f"https://open.er-api.com/v6/latest/{b_code}")
             response.raise_for_status()
@@ -36,10 +37,26 @@ def exchenge():
                 exchange_rate = data["rates"][t_code]
                 t_name = cur[t_code]
                 b_name = cur[b_code]
-                sb_name = cur[sb_code]
-                mb.showinfo("Курс обмена", f"Курс:\n {exchange_rate:.2F} {t_name} за 1 {b_name}\n {exchange_rate:.2F} {t_name} за 1 {sb_name}")
+                mb.showinfo("Курс обмена", f"Курс:\n {exchange_rate:.2F} {t_name} за 1 {b_name}")
             else:
-                mb.showerror("Ошибкка!",f"Валюта {t_code}не найдена")
+                mb.showerror("Ошибка!",f"Валюта {t_code}не найдена")
+        except Exception as e:
+            mb.showerror("Ошибка!", f"Произошла ошибка: {e}.")
+    else:
+        mb.showwarning("Внимание!", "Введите код валюты!")
+
+    if t_code and sb_code:
+        try:
+            response = requests.get(f"https://open.er-api.com/v6/latest/{sb_code}")
+            response.raise_for_status()
+            data = response.json()
+            if t_code in data["rates"]:
+                exchange_rate = data["rates"][t_code]
+                t_name = cur[t_code]
+                sb_name = cur[sb_code]
+                mb.showinfo("Курс обмена", f"Курс:\n {exchange_rate:.2F} {t_name} за 1 {sb_name}")
+            else:
+                mb.showerror("Ошибка!",f"Валюта {t_code}не найдена")
         except Exception as e:
             mb.showerror("Ошибка!", f"Произошла ошибка: {e}.")
     else:
@@ -60,35 +77,29 @@ cur = {
 
 window = Tk()
 window.title("Курсы обмена валют")
-window.geometry("280x450")
+window.geometry("280x380")
 
-
-Label(text="Базовая валюта").pack(padx=10, pady=10)
+Label(text="Базовая валюта", font="Helvecia, 14").pack(padx=5, pady=5)
 b_combobox = ttk.Combobox(values=list(cur.keys()))
-b_combobox.pack(padx=10, pady=10)
+b_combobox.pack(padx=5, pady=5)
 b_combobox.bind("<<ComboboxSelected>>", update_b_label)
 b_label = ttk.Label()
-b_label.pack(padx=10, pady=10)
+b_label.pack(padx=5, pady=5)
 
-
-Label(text="Целевая валюта").pack(padx=10, pady=10)
+Label(text="Вторая базовая валюта", font="Helvecia, 14").pack(padx=5, pady=5)
 sb_combobox = ttk.Combobox(values=list(cur.keys()))
-sb_combobox.pack(padx=10, pady=10)
+sb_combobox.pack(padx=5, pady=5)
 sb_combobox.bind("<<ComboboxSelected>>", update_sb_label)
 sb_label = ttk.Label()
-sb_label.pack(padx=10, pady=10)
+sb_label.pack(padx=5, pady=5)
 
-
-Label(text="Целевая валюта").pack(padx=10, pady=10)
+Label(text="Целевая валюта", font="Helvecia, 14").pack(padx=5, pady=5)
 t_combobox = ttk.Combobox(values=list(cur.keys()))
-t_combobox.pack(padx=10, pady=10)
+t_combobox.pack(padx=5, pady=5)
 t_combobox.bind("<<ComboboxSelected>>", update_t_label)
 t_label = ttk.Label()
-t_label.pack(padx=10, pady=10)
+t_label.pack(padx=5, pady=5)
 
-
-Button(text="Получить курс обмена", command=exchenge).pack(padx=10, pady=10)
-
+Button(text="Получить курс обмена", font="Helvecia, 14", command=exchenge).pack(padx=10, pady=10)
 
 window.mainloop()
-
